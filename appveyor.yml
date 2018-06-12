@@ -1,0 +1,14 @@
+image:
+  - Ubuntu
+
+environment:
+  APPVEYOR_YML_DISABLE_PS_LINUX: true
+
+services:
+  - docker
+
+build_script:
+  - sh: docker run -v /home/appveyor/projects/bililivegiftcan:/src --rm -i robinryf/unity3d:2018_1_0f2 run-unity.sh "-quit -batchmode -projectPath /src -executeMethod CIRunner.Build"
+
+artifacts:
+  - path: build
