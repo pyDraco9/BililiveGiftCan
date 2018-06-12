@@ -2,7 +2,7 @@
 
 ## 效果
 
-此处是图片
+![效果](./README.png)
 
 ## LICENSE
 
