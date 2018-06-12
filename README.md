@@ -1,4 +1,4 @@
-# B站礼物瓶
+# B站礼物瓶 [![Build status](https://ci.appveyor.com/api/projects/status/faoxoxke06bb0ho4?svg=true)](https://ci.appveyor.com/project/Genteure/bililivegiftcan)
 
 ## 效果
 
