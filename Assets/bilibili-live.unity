@@ -485,10 +485,11 @@ MonoBehaviour:
   text_count: {fileID: 1947528267}
   text_price: {fileID: 1868260234}
   bomb: 0
-  roomId: 12720
+  count: 0
+  roomId: 271744
   ChatHost: broadcastlv.chat.bilibili.com
   ChatPort: 2243
-  FountainCommand: ">\u55B7\u6CC9"
+  penquanCommand: ">\u55B7\u6CC9"
   giftListUrl: https://api.live.bilibili.com/gift/v3/live/gift_config
 --- !u!1 &951576484
 GameObject:
@@ -629,7 +630,7 @@ GameObject:
   - component: {fileID: 955602686}
   - component: {fileID: 955602685}
   m_Layer: 0
-  m_Name: Cube_right_Fountain
+  m_Name: Cube_right_bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -997,7 +998,7 @@ GameObject:
   - component: {fileID: 1251675709}
   - component: {fileID: 1251675708}
   m_Layer: 5
-  m_Name: Fountain_Button
+  m_Name: "\u55B7\u6CC9_Button"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1060,7 +1061,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1251675709}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 574274882}
+        m_MethodName: Button_OnClick_Bomb
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1251675709
@@ -1240,6 +1252,7 @@ GameObject:
   - component: {fileID: 1437818722}
   - component: {fileID: 1437818724}
   - component: {fileID: 1437818723}
+  - component: {fileID: 1437818725}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -1304,6 +1317,28 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1437818721}
+--- !u!114 &1437818725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1437818721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40946dc6cc465d74ca01de298a13b53d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ball: {fileID: 0}
+  text_id: {fileID: 0}
+  text_count: {fileID: 0}
+  text_price: {fileID: 0}
+  bomb: 0
+  count: 0
+  roomId: 12720
+  ChatHost: broadcastlv.chat.bilibili.com
+  ChatPort: 2243
+  penquanCommand: ">\u55B7\u6CC9"
+  giftListUrl: https://api.live.bilibili.com/gift/v3/live/gift_config
 --- !u!1 &1503105181
 GameObject:
   m_ObjectHideFlags: 0
@@ -1316,7 +1351,7 @@ GameObject:
   - component: {fileID: 1503105184}
   - component: {fileID: 1503105183}
   m_Layer: 5
-  m_Name: Clone_Button
+  m_Name: "\u514B\u9686_Button"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1379,7 +1414,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1503105184}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 574274882}
+        m_MethodName: Button_OnClick_clone
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1503105184
@@ -1562,7 +1608,7 @@ GameObject:
   - component: {fileID: 1566107503}
   - component: {fileID: 1566107502}
   m_Layer: 0
-  m_Name: Cube_left_Fountain
+  m_Name: Cube_left_bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2033,6 +2079,7 @@ GameObject:
   - component: {fileID: 1907345935}
   - component: {fileID: 1907345938}
   - component: {fileID: 1907345937}
+  - component: {fileID: 1907345936}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -2058,6 +2105,28 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1907345936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1907345934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40946dc6cc465d74ca01de298a13b53d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ball: {fileID: 0}
+  text_id: {fileID: 0}
+  text_count: {fileID: 0}
+  text_price: {fileID: 0}
+  bomb: 0
+  count: 0
+  roomId: 12720
+  ChatHost: broadcastlv.chat.bilibili.com
+  ChatPort: 2243
+  penquanCommand: ">\u55B7\u6CC9"
+  giftListUrl: https://api.live.bilibili.com/gift/v3/live/gift_config
 --- !u!114 &1907345937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2455,7 +2524,7 @@ GameObject:
   - component: {fileID: 2057090406}
   - component: {fileID: 2057090405}
   m_Layer: 5
-  m_Name: DanmakuLoad_Button
+  m_Name: "\u8FDE\u63A5\u5F39\u5E55_Button"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2518,7 +2587,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2057090406}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 574274882}
+        m_MethodName: Button_OnClick_DanmakuLoad
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &2057090406
