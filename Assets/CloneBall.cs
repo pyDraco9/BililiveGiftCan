@@ -24,54 +24,51 @@ public class CloneBall : MonoBehaviour
     public Text text_id;
     public Text text_count;
 	public Text text_price;
-	Dictionary<int, Sprite> SpriteDic = new Dictionary<int, Sprite>();
-	Dictionary<int, string> giftDic = new Dictionary<int, string>();
+    private Sprite[] SpriteArr = new Sprite[999];
 	public bool bomb = false;
+	public int count = 0;
 	public int roomId = 12720;
 	public string ChatHost = "broadcastlv.chat.bilibili.com";
 	public int ChatPort = 2243;
-	public string FountainCommand = ">喷泉";
+	public string penquanCommand = ">喷泉";
+	private string[] giftListData = new string[99999];
 	public string giftListUrl = "https://api.live.bilibili.com/gift/v3/live/gift_config";
+	private DanmakuModel tmp = new DanmakuModel();
 
-	// Use this for initialization
-	void Start()
-	{
-		//UnityEngine.Debug.Log ("Start");
-		ListernerInitialization ();
+    GameObject[] obj;
+    // Use this for initialization
+	IEnumerator Start()
+    {
+		tmp.giftId = "1";
+		tmp.GiftName = "人造辣条";
+		tmp.GiftCount = 1;
+		tmp.giftPrice = 100;
+		tmp.MsgType = MsgTypeEnum.GiftSend;
 
 		Screen.SetResolution(900, 900, false);
 		queue = new Queue(); 
 		GameObject BottlePIC = GameObject.Find ("BottlePIC");
 		BottlePIC.GetComponent<Renderer> ().sortingOrder = 12451;
 
-		StartCoroutine (DownLoadImgBasic ());
-	}
-
-	IEnumerator DownLoadImgBasic ()
-	{
 		WWW www = new WWW(giftListUrl);
 		yield return www;
 		if (www != null && string.IsNullOrEmpty(www.error))
 		{
-			//UnityEngine.Debug.Log (www.text);
 			var obj = JObject.Parse(www.text);
 			foreach (var data in obj ["data"])
 			{
-				giftDic.Add(int.Parse(data["id"].ToString()), data["img_basic"].ToString());
-				DanmakuModel dama = new DanmakuModel();
-				dama.giftId = data["id"].ToString();
-				dama.GiftName = data["name"].ToString();
-				dama.GiftCount = 1;
-				dama.giftPrice = int.Parse(data["price"].ToString());
-				dama.MsgType = MsgTypeEnum.GiftSend;
-				StartCoroutine (GetGiftPic (dama, false));
-				//UnityEngine.Debug.Log (giftDic [int.Parse(data["id"].ToString())]);
+				giftListData [int.Parse(data["id"].ToString())] = data["img_basic"].ToString();
+				//UnityEngine.Debug.Log (giftListData [int.Parse(data["id"].ToString())]);
 			}
 
 		}
+    }
+
+	public void humanGift(){
+		queue.Enqueue(tmp);
 	}
 
-	public void ContralFountain(bool contral)
+	public void ContralPenquan(bool contral)
 	{
 		GameObject Cube_left_bomb = GameObject.Find ("Cube_left_bomb");
 		GameObject Cube_right_bomb = GameObject.Find ("Cube_right_bomb");
@@ -83,30 +80,14 @@ public class CloneBall : MonoBehaviour
 		bomb = contral;
 	}
 
-	void ListernerInitialization()
-	{
-		GameObject obj = GameObject.Find ("Clone_Button");
-		Button btn = (Button)obj.GetComponent<Button> ();
-		btn.onClick.AddListener (Button_OnClick_Clone);
-
-		obj = GameObject.Find ("DanmakuLoad_Button");
-		btn = (Button)obj.GetComponent<Button> ();
-		btn.onClick.AddListener (Button_OnClick_DanmakuLoad);
-
-		obj = GameObject.Find ("Fountain_Button");
-		btn = (Button)obj.GetComponent<Button> ();
-		btn.onClick.AddListener (Button_OnClick_Fountain);
-	}
-
     // Update is called once per frame
     void Update()
     {
 		try
 		{
-			GameObject[] obj;
 			obj = FindObjectsOfType(typeof(GameObject)) as GameObject[];
 			if (obj.Length < 500 && bomb == true) {
-				ContralFountain(false);
+				ContralPenquan(false);
 			}
 			int i = 0;
 			foreach (GameObject child in obj)
@@ -134,8 +115,8 @@ public class CloneBall : MonoBehaviour
 					}
 				case MsgTypeEnum.Comment:
 					{
-						if(dama.isAdmin && dama.CommentText == FountainCommand && bomb == false){
-							ContralFountain(true);
+						if(dama.isAdmin && dama.CommentText == penquanCommand && bomb == false){
+							ContralPenquan(true);
 						}
 						break;
 					}
@@ -153,52 +134,50 @@ public class CloneBall : MonoBehaviour
 		}
     }
 
-    public void Button_OnClick_Clone()
+    public void Button_OnClick_clone()
     {
-		DanmakuModel dama = new DanmakuModel();
-		dama.giftId = text_id.text;
-		dama.GiftName = "人造物品";
-		dama.GiftCount = int.Parse(text_count.text);
-		dama.giftPrice = int.Parse(text_price.text);
-		dama.MsgType = MsgTypeEnum.GiftSend;
-		if (dama.giftPrice >= 1000) 
-		{
-			dama.GiftCount = (int)Math.Round(new decimal(dama.giftPrice/1000*dama.GiftCount),MidpointRounding.AwayFromZero);
-		}
-		UnityEngine.Debug.Log ("Button_OnClick_Clone");
-		queue.Enqueue (dama);
-
+		int i = 0;
+		DanmakuModel tmp = new DanmakuModel();
+		tmp.giftId = text_id.text;
+		tmp.GiftName = "测试物品";
+		tmp.GiftCount = int.Parse(text_count.text);
+		tmp.giftPrice = int.Parse(text_price.text);
+		for (i = 1; i <= tmp.GiftCount; i++)
+        {
+            addGift(tmp);
+        }
     }
 
-	public void Button_OnClick_Fountain(){
-		GameObject Cube_left_Fountain = GameObject.Find ("Cube_left_Fountain");
-		GameObject Cube_right_Fountain = GameObject.Find ("Cube_right_Fountain");
+	public void Button_OnClick_Bomb(){
+		GameObject Cube_left_bomb = GameObject.Find ("Cube_left_bomb");
+		GameObject Cube_right_bomb = GameObject.Find ("Cube_right_bomb");
 
-		bool open = !Cube_left_Fountain.GetComponent<BoxCollider2D> ().usedByEffector;
+		bool open = !Cube_left_bomb.GetComponent<BoxCollider2D> ().usedByEffector;
 
-		Cube_left_Fountain.GetComponent<BoxCollider2D>().usedByEffector = open;
-		Cube_right_Fountain.GetComponent<BoxCollider2D>().usedByEffector = open;
-		Cube_left_Fountain.GetComponent<Rigidbody2D>().simulated = open;
-		Cube_right_Fountain.GetComponent<Rigidbody2D>().simulated = open;
+		Cube_left_bomb.GetComponent<BoxCollider2D>().usedByEffector = open;
+		Cube_right_bomb.GetComponent<BoxCollider2D>().usedByEffector = open;
+		Cube_left_bomb.GetComponent<Rigidbody2D>().simulated = open;
+		Cube_right_bomb.GetComponent<Rigidbody2D>().simulated = open;
 	}
 
 	public void SetBomb(bool simulated){
 
 	}
 
-	void addGift(DanmakuModel dama)
+	void addGift(DanmakuModel gift)
     {
-		if (!SpriteDic [int.Parse(dama.giftId)]) {
-			StartCoroutine (GetGiftPic (dama));
+		if (!SpriteArr [int.Parse(gift.giftId)]) {
+			StartCoroutine (GetGiftPic (gift));
 		} else {
-			MakeClone(dama);
+			MakeClone(gift);
 		}
     }
 
 	public void MakeClone(DanmakuModel gift)
     {
+		count++;
         GameObject clone = Instantiate(Ball, new Vector3(0, 6, 0), Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(0f, 360f))) as GameObject;
-		clone.GetComponent<SpriteRenderer>().sprite = SpriteDic[int.Parse(gift.giftId)];
+		clone.GetComponent<SpriteRenderer>().sprite = SpriteArr[int.Parse(gift.giftId)];
 		clone.GetComponent<Rigidbody2D>().name = "Ball";
 		clone.GetComponent<Rigidbody2D>().mass = gift.giftPrice/4000f;
 		clone.GetComponent<Renderer> ().sortingOrder = gift.giftPrice/100;
@@ -206,25 +185,19 @@ public class CloneBall : MonoBehaviour
 		clone.GetComponent<Rigidbody2D>().simulated = true;
     }
 
-	IEnumerator GetGiftPic(DanmakuModel dama, bool make = true)
+	IEnumerator GetGiftPic(DanmakuModel gift)
     {
 		//UnityEngine.Debug.Log ("downloadPic:" + gift.giftId);
 		//string url = string.Format("https://s1.hdslb.com/bfs/static/blive/blfe-live-room/static/img/gift-images/image-png/gift-{0}.png", gift.giftId);
-		//UnityEngine.Debug.Log (giftDic[int.Parse(dama.giftId)].ToString());
-		WWW www = new WWW(giftDic[int.Parse(dama.giftId)].ToString());//giftListData[int.Parse(gift.giftId)]["img_basic"]
+		UnityEngine.Debug.Log (giftListData[int.Parse(gift.giftId)].ToString());
+		WWW www = new WWW(giftListData[int.Parse(gift.giftId)].ToString());//giftListData[int.Parse(gift.giftId)]["img_basic"]
         yield return www;
         if (www != null && string.IsNullOrEmpty(www.error))
         {
-			Texture2D texture = ScaleTexture(www.texture, 100, 100);
-			if (dama.giftPrice >= 1000) {
-				texture = ScaleTexture(www.texture, 140, 140);
-			}
+            Texture2D texture = ScaleTexture(www.texture, 100, 100);
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-			SpriteDic[int.Parse(dama.giftId)] = sprite;
-			if(make)
-			{
-				MakeClone(dama);
-			}
+			SpriteArr[int.Parse(gift.giftId)] = sprite;
+			MakeClone(gift);
         }
     }
 
@@ -432,17 +405,13 @@ public class CloneBall : MonoBehaviour
 							case MsgTypeEnum.GiftSend:
 								{
 									//UnityEngine.Debug.Log(dama.giftId);
-									if(dama.giftPrice >= 1000)
-									{
-										dama.GiftCount = (int)Math.Round(new decimal(dama.giftPrice/1000*dama.GiftCount),MidpointRounding.AwayFromZero);
-									}
 									queue.Enqueue(dama);
 									break;
 								}
 							case MsgTypeEnum.Comment:
 								{
 									//UnityEngine.Debug.Log(dama.CommentText);
-									if(dama.isAdmin && dama.CommentText == FountainCommand){
+									if(dama.isAdmin && dama.CommentText == penquanCommand){
 										queue.Enqueue(dama);
 									}
 									break;
